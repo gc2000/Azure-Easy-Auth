@@ -1,0 +1,5 @@
+{
+  "name": "Azure Easy Auth Starter",
+  "description": "A React application demonstrating Azure App Service Authentication (Easy Auth) integration with Azure Entra ID, Google, and Facebook.",
+  "requestFramePermissions": []
+}
