@@ -4,10 +4,9 @@ export interface UserClaim {
 }
 
 export interface ClientPrincipal {
-  auth_typ: string; // The identity provider (e.g., "aad", "google", "facebook")
-  name_typ: string;
-  role_typ: string;
-  claims: UserClaim[];
+  user_id: string;
+  provider_name: string;
+  user_claims: UserClaim[];
 }
 
 // Response format from /.auth/me

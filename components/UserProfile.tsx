@@ -10,15 +10,17 @@ interface UserProfileProps {
 export const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
   // Extract a display name from claims if possible
   const displayName = useMemo(() => {
-    const nameClaim = user.claims.find(
+    // Note: Azure returns 'user_claims' in the /.auth/me payload
+    const nameClaim = user.user_claims.find(
       c => c.typ === 'name' || c.typ.includes('name') || c.typ.includes('emailaddress')
     );
-    return nameClaim ? nameClaim.val : user.details || 'Authenticated User';
+    // Fallback to user_id if name is not found
+    return nameClaim ? nameClaim.val : user.user_id || 'Authenticated User';
   }, [user]);
 
   // Group claims for better readability (shorten standard schemas)
   const formattedClaims = useMemo(() => {
-    return user.claims.map(claim => ({
+    return user.user_claims.map(claim => ({
       ...claim,
       displayType: claim.typ.split('/').pop() || claim.typ
     }));
@@ -36,7 +38,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
             <h1 className="text-2xl font-bold text-slate-900">{displayName}</h1>
             <div className="flex items-center gap-2 mt-1">
               <span className="px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-700 border border-green-200 uppercase tracking-wide">
-                {user.auth_typ}
+                {user.provider_name}
               </span>
               <span className="text-sm text-slate-500">Logged in via Azure Easy Auth</span>
             </div>
@@ -56,7 +58,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
         <div className="px-8 py-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
           <h3 className="text-lg font-semibold text-slate-800">Identity Claims</h3>
           <span className="text-xs font-mono text-slate-400 bg-slate-100 px-2 py-1 rounded">
-            Count: {user.claims.length}
+            Count: {user.user_claims.length}
           </span>
         </div>
         
